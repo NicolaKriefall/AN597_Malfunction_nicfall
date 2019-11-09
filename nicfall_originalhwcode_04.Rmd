@@ -1,0 +1,92 @@
+---
+title: "nicfall_originalhwcode_04"
+author: "Nicola Kriefall"
+date: "10/24/2019"
+output: html_document
+---
+
+HW 4, instructions [here](https://fuzzyatelin.github.io/bioanth-stats/homework-04.html)
+
+[1] Write a simple R function, Z.prop.test(), that can perform one- or two-sample Z-tests for proportion data, using the following guidelines:
+Your function should take the following arguments: p1 and n1 (no default) representing the estimated proportion and sample size (i.e., based on your sample data); p2 and n2 (both defaulting to NULL) that contain a second sample’s proportion and sample size data in the event of a two-sample test; p0 (no default) as the expected value for the population proportion; and alternative (default “two.sided”) and conf.level (default 0.95), to be used in the same way as in the function t.test().
+
+```{r}
+#can perform
+Z.prop.test <- function(p0, p1, n1, p2 = NULL, n2 = NULL, alternative="two.sided", conf.level=0.95){
+  if(is.null(p2) && is.null(n2)){
+    if(alternative=="two.sided"){print("yes")
+    }
+    if(alternative=="less"){print("less than")
+      
+    }
+    if(alternative=="greater"){print("greater than")
+      
+    }
+    }
+  else{print("numeric")
+  }
+}
+
+Z.prop.test(p2 = NULL, n2 = NULL, alternative = "greater")
+
+#check for the rule of thumb that i don't get yet --> print warning
+#one sided or two sided (two sided default)
+#return Z, p, CI
+
+
+
+
+
+```
+
+
+
+
+```{r}
+#variables:
+p1 #estimated proportion
+n1 #sample size
+p2 #default = NULL for second sample
+n2 #default = NULL for second sample
+p0 #no default, expected value for population proportion
+alternative #default = two.sided, could also be "less", "greater"
+conf.level #default = 0.95
+
+p0 <- 0 # also mu, what is this if we don't have it?
+x1 <- df$variable # our data frame
+x2 <- df$variable2 #second data frame
+m1 <- mean(x1) # mean, observed
+m2 <- mean(x2) # mean, observed
+s1 <- sd(x1) # easy
+s2 <- sd(x2) # easy
+n1 <- length(x1) #easy, or we can define
+n2 <- length(x2) #second data set
+sem1 <- s/sqrt(n1) 
+sem2 <- s/sqrt(n2) 
+z1 <- (m1 - mu)/sem1
+p1 <- 1 - pnorm(z1, mean=m1, sd=s1)
+
+?pnorm()
+
+?prop.test
+getAnywhere(prop.test)
+getAnywhere("t.test.default")
+methods("t.test")
+methods("t.test.default")
+GetMethod("t.test")
+
+Z.prop.test <- function(x1, x2 = NULL, p1, n1, p2 = NULL, n2 = NULL, alternative = "two.sided", conf.level = 0.95){
+  if(n1 > 30){
+    out <- binom.test(x = c(x1, x2), n = c(n1,n2), p = c(p1,p2), alternative = alternative, conf.level = conf.level)
+    return(out)
+  } else {
+    out <- prop.test(x = c(x1, x2), n = c(n1,n2), p = c(p1,p2), alternative = alternative, correct = TRUE, conf.level = conf.level)
+    return(out)
+  }
+}
+
+fxn(x1 = 20, p1=0.25,n1=25)
+
+```
+
+
